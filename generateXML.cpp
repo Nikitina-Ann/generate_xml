@@ -77,25 +77,60 @@ XMLElement* generateXML::getElemSequence() {
 XMLElement* generateXML::getMedia() { //temp name, change later
     XMLElement* media = doc.NewElement("media");
     XMLElement* video = doc.NewElement("video");
-    video->InsertEndChild(getVideoTrack());
     media->InsertEndChild(video);
+    video->InsertEndChild(getVideoTrack());
 
 }
 
 XMLElement* generateXML::getVideoTrack() { //temp name, change later
     XMLElement* track = doc.NewElement("track");
     XMLElement* clipitem = doc.NewElement("clipitem");
-    clipitem->SetAttribute("id","clipitem-1");
     track->InsertEndChild(clipitem);
+    clipitem->SetAttribute("id","clipitem-1");
     clipitem->InsertEndChild(getElementWithText("masterclipid","masterclipid-1"));
     clipitem->InsertEndChild(getElementWithText("name", video.videoName));
     clipitem->InsertEndChild(getRate());
     clipitem->InsertEndChild(getElementWithText("alphatype","none"));
     clipitem->InsertEndChild(getElementWithText("pixelaspectratio","square"));
     clipitem->InsertEndChild(getElementWithText("anamorphic","FALSE"));
+
     XMLElement* file = doc.NewElement("file");
-    file->SetAttribute("id","file-1");
     clipitem->InsertEndChild(file);
+    file->SetAttribute("id","file-1");
+    file->InsertEndChild(getElementWithText("name", "placeholder")); //fix latter
+    file->InsertEndChild(getElementWithText("pathurl", "placeholder")); //fix latter
+    file->InsertEndChild(getRate());
+    file->InsertEndChild(getElementWithText("duration", "325"));
+
+    XMLElement* timecode = doc.NewElement("timecode");
+    file->InsertEndChild(timecode);
+    timecode->InsertEndChild(getRate());
+    timecode->InsertEndChild(getElementWithText("string", "00:00:00:00"));
+    timecode->InsertEndChild(getElementWithText("frame", "0"));
+    timecode->InsertEndChild(getElementWithText("displayformat", "NDF"));
+
+    XMLElement* media = doc.NewElement("media");
+    file->InsertEndChild(media);
+
+    XMLElement* video = doc.NewElement("video");
+    media->InsertEndChild(video);
+    XMLElement* samplecharacteristicsVideo = doc.NewElement("samplecharacteristics");
+    video->InsertEndChild(samplecharacteristicsVideo);
+    samplecharacteristicsVideo->InsertEndChild(getRate());
+    samplecharacteristicsVideo->InsertEndChild(getElementWithText("width", "1280"));
+    samplecharacteristicsVideo->InsertEndChild(getElementWithText("height", "720"));
+    samplecharacteristicsVideo->InsertEndChild(getElementWithText("anamorphic", "FALSE"));
+    samplecharacteristicsVideo->InsertEndChild(getElementWithText("pixelaspectratio", "square"));
+    samplecharacteristicsVideo->InsertEndChild(getElementWithText("fielddominance", "none"));
+
+    XMLElement* audio = doc.NewElement("audio");
+    media->InsertEndChild(audio);
+    XMLElement* samplecharacteristicsAudio = doc.NewElement("samplecharacteristics");
+    audio->InsertEndChild(samplecharacteristicsAudio);
+    samplecharacteristicsAudio->InsertEndChild(getElementWithText("depth", "16"));
+    samplecharacteristicsAudio->InsertEndChild(getElementWithText("samplerate", "48000"));
+    audio->InsertEndChild(getElementWithText("channelcount", "2"));
+
 }
 
 XMLElement* generateXML::getLoggingInfo() {
