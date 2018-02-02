@@ -2,6 +2,7 @@
 #define GENERATEXML_H
 
 #include "tinyxml2.h"
+#include "string"
 #include "inputVideo.h"
 using namespace tinyxml2;
 using namespace cv;
@@ -23,6 +24,7 @@ public:
   XMLElement* getElemSequence();
   XMLElement* getMedia(); //temp name, change later
   XMLElement* getVideoTrack(); //temp name, change later
+  XMLElement* getLink(string linkref, string type, int track, int clip, int group); //link generator
   XMLElement* getLoggingInfo();
   XMLElement* getColorInfo();
   XMLElement* getLabels();
