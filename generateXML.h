@@ -6,11 +6,12 @@
 #include "inputVideo.h"
 using namespace tinyxml2;
 using namespace cv;
+
 class generateXML {
 public:
   XMLDocument doc;
   inputVideo video;
-  std::string projectName;
+  string projectName;
   string outputName;
 
   Point outResolution;
