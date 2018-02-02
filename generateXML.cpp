@@ -77,15 +77,15 @@ XMLElement* generateXML::getElemSequence() {
 XMLElement* generateXML::getMedia() { //temp name, change later
     XMLElement* media = doc.NewElement("media");
     XMLElement* video = doc.NewElement("video");
-    media->InsertEndChild(video);
     video->InsertEndChild(getVideoTrack());
+    media->InsertEndChild(video);
 
 }
 
 XMLElement* generateXML::getVideoTrack() { //temp name, change later
     XMLElement* track = doc.NewElement("track");
     XMLElement* clipitem = doc.NewElement("clipitem");
-    track->InsertEndChild(clipitem);
+
     clipitem->SetAttribute("id","clipitem-1");
     clipitem->InsertEndChild(getElementWithText("masterclipid","masterclipid-1"));
     clipitem->InsertEndChild(getElementWithText("name", video.videoName));
@@ -95,42 +95,61 @@ XMLElement* generateXML::getVideoTrack() { //temp name, change later
     clipitem->InsertEndChild(getElementWithText("anamorphic","FALSE"));
 
     XMLElement* file = doc.NewElement("file");
-    clipitem->InsertEndChild(file);
     file->SetAttribute("id","file-1");
     file->InsertEndChild(getElementWithText("name", "placeholder")); //fix latter
     file->InsertEndChild(getElementWithText("pathurl", "placeholder")); //fix latter
     file->InsertEndChild(getRate());
     file->InsertEndChild(getElementWithText("duration", "325"));
-
     XMLElement* timecode = doc.NewElement("timecode");
-    file->InsertEndChild(timecode);
+
     timecode->InsertEndChild(getRate());
     timecode->InsertEndChild(getElementWithText("string", "00:00:00:00"));
     timecode->InsertEndChild(getElementWithText("frame", "0"));
     timecode->InsertEndChild(getElementWithText("displayformat", "NDF"));
+    file->InsertEndChild(timecode);
+
 
     XMLElement* media = doc.NewElement("media");
-    file->InsertEndChild(media);
 
     XMLElement* video = doc.NewElement("video");
-    media->InsertEndChild(video);
     XMLElement* samplecharacteristicsVideo = doc.NewElement("samplecharacteristics");
-    video->InsertEndChild(samplecharacteristicsVideo);
     samplecharacteristicsVideo->InsertEndChild(getRate());
     samplecharacteristicsVideo->InsertEndChild(getElementWithText("width", "1280"));
     samplecharacteristicsVideo->InsertEndChild(getElementWithText("height", "720"));
     samplecharacteristicsVideo->InsertEndChild(getElementWithText("anamorphic", "FALSE"));
     samplecharacteristicsVideo->InsertEndChild(getElementWithText("pixelaspectratio", "square"));
     samplecharacteristicsVideo->InsertEndChild(getElementWithText("fielddominance", "none"));
+    video->InsertEndChild(samplecharacteristicsVideo);
+    media->InsertEndChild(video);
 
     XMLElement* audio = doc.NewElement("audio");
-    media->InsertEndChild(audio);
     XMLElement* samplecharacteristicsAudio = doc.NewElement("samplecharacteristics");
-    audio->InsertEndChild(samplecharacteristicsAudio);
     samplecharacteristicsAudio->InsertEndChild(getElementWithText("depth", "16"));
     samplecharacteristicsAudio->InsertEndChild(getElementWithText("samplerate", "48000"));
+    audio->InsertEndChild(samplecharacteristicsAudio);
     audio->InsertEndChild(getElementWithText("channelcount", "2"));
+    media->InsertEndChild(audio);
+    file->InsertEndChild(media);
 
+    clipitem->InsertEndChild(file);
+
+    clipitem->InsertEndChild(getLink("clipitem-1", "video", 1, 1, -1));
+    clipitem->InsertEndChild(getLink("clipitem-2", "audio", 2, 1, 1));
+    clipitem->InsertEndChild(getLink("clipitem-3", "audio", 3, 1, 1));
+
+    track->InsertEndChild(clipitem);
+    return track;
+}
+
+XMLElement* generateXML::getLink(std::string linkref, std::string type, int track, int clip, int group) {
+    XMLElement* link = doc.NewElement("link");
+    link->InsertEndChild(getElementWithText("linkclipref", linkref));
+    link->InsertEndChild(getElementWithText("mediatype", type));
+    link->InsertEndChild(getElementWithText("trackindex", std::to_string(track)));
+    link->InsertEndChild(getElementWithText("clipindex", std::to_string(clip)));
+    if(group >= 0)
+        link->InsertEndChild(getElementWithText("groupindex", std::to_string(group)));
+    return link;
 }
 
 XMLElement* generateXML::getLoggingInfo() {
