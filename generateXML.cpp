@@ -80,6 +80,7 @@ XMLElement* generateXML::getMedia() { //temp name, change later
     video->InsertEndChild(getVideoTrack());
     media->InsertEndChild(video);
 
+    return media;
 }
 
 XMLElement* generateXML::getVideoTrack() { //temp name, change later
