@@ -21,6 +21,8 @@ public:
   XMLElement* getElementWithText(string name, string text);
   XMLElement* getElemClip();
   XMLElement* getElemSequence();
+  XMLElement* getMedia(); //temp name, change later
+  XMLElement* getVideoTrack(); //temp name, change later
   XMLElement* getLoggingInfo();
   XMLElement* getColorInfo();
   XMLElement* getLabels();
